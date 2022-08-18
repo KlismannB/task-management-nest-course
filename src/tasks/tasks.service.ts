@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './task.model';
 import { v4 as uuid } from 'uuid';
 import { CreateTaskDTO } from './dto/create-task.dto';
-import { UpdateTaskStatusDTO } from './dto/update-task-status.dto';
 import { GetTasksFilterDTO } from './dto/get-task-filter.dto';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class TasksService {
 
     if (status) {
       tasks = tasks.filter((task) => task.status === status);
-    }
+    } 
 
     if (search) {
       tasks = tasks.filter((task) => {
