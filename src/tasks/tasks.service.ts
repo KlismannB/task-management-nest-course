@@ -10,32 +10,34 @@ export class TasksService {
   @InjectRepository(Task)
   private taskRepository: Repository<Task>;
 
-  // public async getTasksWithFilters(filterDTO: GetTasksFilterDTO): void {
-  //   const { status, search } = filterDTO;
+  public async getTasksWithFilters(
+    filterDTO: GetTasksFilterDTO,
+  ): Promise<Task[]> {
+    const { status, search } = filterDTO;
 
-  //   let tasks = this.getAllTasks();
+    let tasks = await this.getAllTasks();
 
-  //   if (status) {
-  //     tasks = tasks.filter((task) => task.status === status);
-  //   }
+    if (status) {
+      tasks = tasks.filter((task) => task.status === status);
+    }
 
-  //   if (search) {
-  //     tasks = tasks.filter((task) => {
-  //       if (
-  //         task.title.toLowerCase().includes(search.toLowerCase()) ||
-  //         task.description.toLowerCase().includes(search.toLowerCase())
-  //       ) {
-  //         return true;
-  //       }
-  //     });
-  //   }
+    if (search) {
+      tasks = tasks.filter((task) => {
+        if (
+          task.title.toLowerCase().includes(search.toLowerCase()) ||
+          task.description.toLowerCase().includes(search.toLowerCase())
+        ) {
+          return true;
+        }
+      });
+    }
 
-  //   return tasks;
-  // }
+    return tasks;
+  }
 
-  // public getAllTasks(): Task[] {
-  //   return this.tasks;
-  // }
+  public getAllTasks(): Promise<Task[]> {
+    return this.taskRepository.find();
+  }
 
   // public createTask(createTaskDto: CreateTaskDTO): Task {
   //   const { title, description } = createTaskDto;
@@ -52,9 +54,15 @@ export class TasksService {
   //   return task;
   // }
 
-  // public async getTaskById(id: string): Promise<Task> {
-  //   return this.taskRepository.findOneBy({ id: id });
-  // }
+  public async getTaskById(id: string): Promise<Task> {
+    const found = await this.taskRepository.findOneBy({ id });
+
+    if (!found) {
+      throw new NotFoundException(`Task ${id} not found`);
+    }
+
+    return found;
+  }
 
   // public removeTaskById(id: string) {
   //   const removedTask = this.getTaskById(id);
