@@ -5,7 +5,7 @@ import { CreateTaskDTO } from './dto/create-task.dto';
 import { UpdateTaskDTO } from './dto/update-task.dto';
 
 @Injectable()
-export class  TasksService {
+export class TasksService {
   private tasks: Task[] = [];
 
   public getAllTasks(): Task[] {
@@ -32,17 +32,15 @@ export class  TasksService {
   }
 
   public removeTaskById(id: string) {
-    const removedTask = this.tasks.find((task) => task.id === id);
+    const removedTask = this.getTaskById(id);
 
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+    this.tasks = this.tasks.filter((task) => task !== this.getTaskById(id));
 
     return removedTask;
   }
 
   public updateTaskStatusById(updateTaskDTO: UpdateTaskDTO): Task {
-    const taskToBeUpdated = this.tasks.find(
-      (task) => task.id === updateTaskDTO.id,
-    );
+    const taskToBeUpdated = this.getTaskById(updateTaskDTO.id);
     taskToBeUpdated.status = updateTaskDTO.status;
 
     return taskToBeUpdated;
