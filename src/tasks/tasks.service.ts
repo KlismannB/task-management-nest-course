@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './task.model';
 import { v4 as uuid } from 'uuid';
 import { CreateTaskDTO } from './dto/create-task.dto';
-import { UpdateTaskDTO } from './dto/update-task-status.dto';
+import { UpdateTaskStatusDTO } from './dto/update-task-status.dto';
 import { GetTasksFilterDTO } from './dto/get-task-filter.dto';
 
 @Injectable()
@@ -67,9 +67,9 @@ export class TasksService {
     return removedTask;
   }
 
-  public updateTaskStatusById(updateTaskDTO: UpdateTaskDTO): Task {
-    const taskToBeUpdated = this.getTaskById(updateTaskDTO.id);
-    taskToBeUpdated.status = updateTaskDTO.status;
+  public updateTaskStatusById(id: string, status: TaskStatus): Task {
+    const taskToBeUpdated = this.getTaskById(id);
+    taskToBeUpdated.status = status;
 
     return taskToBeUpdated;
   }
