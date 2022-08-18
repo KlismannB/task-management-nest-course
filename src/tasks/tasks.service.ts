@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDTO } from './dto/get-task-filter.dto';
+import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
 
 @Injectable()
@@ -35,24 +36,23 @@ export class TasksService {
     return tasks;
   }
 
-  public getAllTasks(): Promise<Task[]> {
+  public async getAllTasks(): Promise<Task[]> {
     return this.taskRepository.find();
   }
 
-  // public createTask(createTaskDto: CreateTaskDTO): Task {
-  //   const { title, description } = createTaskDto;
+  public async createTask(createTaskDto: CreateTaskDTO): Promise<Task> {
+    const { title, description } = createTaskDto;
 
-  //   const task: Task = {
-  //     id: uuid(),
-  //     title: title,
-  //     description: description,
-  //     status: TaskStatus.OPEN,
-  //   };
+    const task = this.taskRepository.create({
+      title: title,
+      description: description,
+      status: TaskStatus.OPEN,
+    });
+    
+    this.taskRepository.save(task);
 
-  //   this.tasks.push(task);
-
-  //   return task;
-  // }
+    return task;
+  }
 
   public async getTaskById(id: string): Promise<Task> {
     const found = await this.taskRepository.findOneBy({ id });
