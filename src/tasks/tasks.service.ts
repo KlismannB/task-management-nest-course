@@ -25,4 +25,16 @@ export class TasksService {
 
     return task;
   }
+
+  public getTaskById(id: string): Task {
+    return this.tasks.find((task) => task.id === id);
+  }
+
+  public removeTaskById(id: string) {
+    const removedTask = this.tasks.find((task) => task.id === id);
+
+    this.tasks = this.tasks.filter((task) => task.id !== id);
+
+    return removedTask;
+  }
 }
