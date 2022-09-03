@@ -4,7 +4,7 @@ import { AuthCredentialsDTO } from './dto/auth-credentials.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @Post('/sign-up')
   public async signUp(
@@ -16,7 +16,7 @@ export class AuthController {
   @Post('/sign-in')
   public async signIn(
     @Body() authCredentialsDTO: AuthCredentialsDTO,
-  ): Promise<string> {
+  ): Promise<{ accessToken: string }> {
     return this.authService.signIn(authCredentialsDTO);
   }
 }
