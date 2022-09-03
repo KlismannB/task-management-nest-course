@@ -4,7 +4,7 @@ import { AuthCredentialsDTO } from './dto/auth-credentials.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   @Post('/sign-up')
   public async signUp(
