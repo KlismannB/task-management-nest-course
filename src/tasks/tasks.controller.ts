@@ -20,7 +20,7 @@ import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 export class TasksController {
   private logger = new Logger('TasksController');
   constructor(private tasksService: TasksService) {}
@@ -32,11 +32,6 @@ export class TasksController {
   ): Promise<Task[]> {
     this.logger.verbose(`User ${user.username} retrieving all tasks`);
     return this.tasksService.getTasksWithFilters(filterDTO, user);
-  }
-
-  @Get()
-  public getAllTasks(@GetUser() user: User): Promise<Task[]> {
-    return this.tasksService.getAllTasks(user);
   }
 
   @Get('/:id')
@@ -52,6 +47,7 @@ export class TasksController {
     @Body() createTaskDto: CreateTaskDTO,
     @GetUser() user: User,
   ): Promise<Task> {
+    this.logger.verbose(`User ${user.username} is creating a task`);
     return this.tasksService.createTask(createTaskDto, user);
   }
 
