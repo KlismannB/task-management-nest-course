@@ -19,10 +19,10 @@ export class TasksService {
     const { status, search } = filterDTO;
 
     const query = this.taskRepository.createQueryBuilder('task');
-    query.where(user);
+    query.where({ user });
 
     if (status) {
-      query.andWhere('task.status == :status', { status: status });
+      query.andWhere('task.status = :status', { status: status });
     }
 
     if (search) {
@@ -34,10 +34,6 @@ export class TasksService {
     }
 
     return query.getMany();
-  }
-
-  public async getAllTasks(user: User): Promise<Task[]> {
-    return this.taskRepository.find({ where: { user } });
   }
 
   public async createTask(
