@@ -14,9 +14,10 @@ import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
-  @InjectRepository(User)
-  private usersRepository: Repository<User>;
-  private jwtService: JwtService;
+  constructor(
+    @InjectRepository(User) private usersRepository: Repository<User>,
+    private jwtService: JwtService,
+  ) {}
 
   async createUser(authCredentialsDTO: AuthCredentialsDTO): Promise<void> {
     const { username, password } = authCredentialsDTO;
@@ -46,7 +47,7 @@ export class AuthService {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { username };
-      const accessToken: string = await this.jwtService.signAsync(payload);
+      const accessToken: string = this.jwtService.sign(payload);
       return { accessToken };
     } else {
       throw new UnauthorizedException('Please check your login credentials');
